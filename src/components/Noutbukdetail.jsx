@@ -1,0 +1,119 @@
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import Noutbuk_slider from "./Noutbuk_slider";
+export default function Noutbukdetil() {
+
+    const { id } = useParams();
+    const [phone, setPhone] = useState({});
+    const [soni, setSoni] = useState(1);
+
+    useEffect(() => {
+        fetch("https://market-backend-zeta.vercel.app/sport/" + id)
+            .then((res) => res.json())
+            .then((data) => setPhone(data));
+    }, []);
+    const [index, setIndex] = useState(0);
+
+    function oldinga() {
+        if (index < rasmlar.length - 1) {
+            setIndex(index + 1);
+        } else {
+            setIndex(0);
+        }
+    }
+
+    function orqaga() {
+        if (index > 0) {
+            setIndex(index - 1);
+        } else {
+            setIndex(rasmlar.length - 1);
+        }
+    }
+
+    function qoshish() {
+        let savat = JSON.parse(localStorage.getItem("cart")) || [];
+        savat.push(phone);
+        localStorage.setItem("cart", JSON.stringify(savat));
+    }
+    function qoshish() {
+        let savat = JSON.parse(localStorage.getItem("cart")) || [];
+        let bor = false;
+
+        for (let i = 0; i < savat.length; i++) {
+            if (savat[i].id == phone.id) {
+                bor = true;
+            }
+        }
+
+        if (bor == false) {
+            savat.push(phone);
+            localStorage.setItem("cart", JSON.stringify(savat));
+        }
+
+        alert("Savatga qo'shildi");
+        function likeQosh() {
+            let likes = JSON.parse(localStorage.getItem("likes")) || [];
+            let bor = false;
+
+            for (let i = 0; i < likes.length; i++) {
+                if (likes[i].id == phone.id) {
+                    bor = true;
+                }
+            }
+
+            if (bor == false) {
+                likes.push(phone);
+                localStorage.setItem("likes", JSON.stringify(likes));
+            }
+
+            alert("Likes ga qo'shildi");
+        }
+    }
+    function likeQosh() {
+        let likes = JSON.parse(localStorage.getItem("likes")) || [];
+        let bor = false;
+
+        for (let i = 0; i < likes.length; i++) {
+            if (likes[i].id == phone.id) {
+                bor = true;
+            }
+        }
+
+        if (bor == false) {
+            likes.push(phone);
+            localStorage.setItem("likes", JSON.stringify(likes));
+        }
+
+        alert("Likes ga qo'shildi");
+    }
+    let narx = Number(String(phone.price || 0).split(" ").join("")) || 0;
+
+    return (
+        <div className="">
+<Noutbuk_slider/>
+
+            <div className="box">
+
+                <div className="kichik">
+                    <img src={phone.img} />
+                    <img src={phone.img} />
+                    <img src={phone.img} />
+                </div>
+
+                <img src={phone.img} className="katta" />
+                <div>
+                    <h2>{phone.title}</h2>
+                    <p>{narx * soni}</p>
+                    <button onClick={() => soni > 1 && setSoni(soni - 1)}>-</button>
+                    <span>{soni}</span>
+                    <button onClick={() => setSoni(soni + 1)}>+</button>
+                    <button onClick={qoshish}>Savatga</button>
+                    <button onClick={likeQosh}>Like</button>
+
+                </div>
+            </div>
+
+
+        </div>
+    );
+}
